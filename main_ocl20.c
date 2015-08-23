@@ -3,7 +3,7 @@
 //  CasAES_CL
 //
 //  Created by Carter McCardwell on 12/7/14.
-//  Copyright (c) 2014 Casdidicus. All rights reserved.
+//  Copyright (c) 2015 Carter McCardwell. All rights reserved.
 //
 
 #define __NO_STD_VECTOR
