@@ -178,14 +178,16 @@ int main(int argc, const char * argv[])
     K_Exp(&key); //The expansion runtime is faster to execute on the CPU (no kernel startup time) and we are able to store it in constant memory (see below)
 
     char *append_str = "#pragma OPENCL EXTENSION cl_khr_byte_addressable_store : enable\n#define Nb 4\n#define Nr 14\n#define Nk 8\n\n__constant uint eK[60]={";
+    char *key_element;
     for (int i = 0; i < 60; i++) //The private key will be dynamically added to the source of the kernel before it is compiled, this means that it will be stored in constant memory
     {
-        char *key_element = (char *)malloc(sizeof(uint32_t));
+        key_element = (char *)malloc(sizeof(uint32_t));
         sprintf(key_element, "%x", expanded_key[i]);
         append_str = stradd(append_str, "0x");
         append_str = stradd(append_str, key_element);
         if (i != 59) { append_str = stradd(append_str, ","); }
     }
+    free(key_element);
     append_str = stradd(append_str, "};\n");
 
     cl_code = fopen("kernel_ocl12.cl", "r");
@@ -374,6 +376,7 @@ int main(int argc, const char * argv[])
     fclose(infile);
     fclose(outfile);
     fclose(keyfile);
+    free(source_str);
     clReleaseContext(context);
     clReleaseCommandQueue(queue);
     return 0;
